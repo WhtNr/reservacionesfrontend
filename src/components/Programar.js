@@ -12,6 +12,8 @@ export default function Programar() {
     const [fecha, setFecha] = useState('');
     const [errorFecha, setErrorFecha] = useState('');
     const [errorHora, setErrorHora] = useState('');
+    const [confirmacion, setConfirmacion] = useState('');
+    const [error, setError] = useState('');
 
 
 
@@ -47,12 +49,17 @@ export default function Programar() {
             headers:{"Content-Type":"application/json"},
             body: JSON.stringify(cita)
         }).then((response) => {
-            if (!response.ok) {
-                throw new Error('Error al programar cita');
+            if (response.ok) {
+                setConfirmacion('¡Cita Programada con éxito!');
+                setError('');
+            } else {
+                setConfirmacion('');
+                setError('Hubo un problema al programar la cita. Inténtalo de nuevo.');
             }
-            console.log("Cita programada");
-        }).catch((error) => {
-            console.error("Error al programar citah:", error);
+        }).catch(error => {
+            console.error('Error al enviar la solicitud:', error);
+            setConfirmacion('');
+            setError('Hubo un problema al programar la cita. Inténtalo de nuevo.');
         });
     };
 
@@ -114,6 +121,9 @@ export default function Programar() {
                         Programar Cita
                     </Button>
                 </form>
+                {/* Mensajes de confirmación y error */}
+                {confirmacion && <p style={{ color: 'green' }}>{confirmacion}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
             </Box>
         </Container>
     );

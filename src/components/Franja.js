@@ -10,6 +10,8 @@ export default function Franja() {
     const [horaFin, setHoraFin] = useState('');
     const [errorFecha, setErrorFecha] = useState('');
     const [errorHora, setErrorHora] = useState('');
+    const [confirmacion, setConfirmacion] = useState('');
+    const [error, setError] = useState('');
 
 
 
@@ -38,8 +40,18 @@ export default function Franja() {
             method: "POST",
             headers:{"Content-Type":"application/json"},
             body: JSON.stringify(franja)
-        }).then(() => {
-            console.log("Nueva Franja agregada");
+        }).then(response => {
+            if (response.ok) {
+                setConfirmacion('¡Franja creada con éxito!');
+                setError('');
+            } else {
+                setConfirmacion('');
+                setError('Hubo un problema al crear la franja. Inténtalo de nuevo.');
+            }
+        }).catch(error => {
+            console.error('Error al enviar la solicitud:', error);
+            setConfirmacion('');
+            setError('Hubo un problema al crear la franja. Inténtalo de nuevo.');
         });
     };
 
@@ -85,6 +97,9 @@ export default function Franja() {
                         Crear
                     </Button>
                 </form>
+                {/* Mensajes de confirmación y error */}
+                {confirmacion && <p style={{ color: 'green' }}>{confirmacion}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
             </Box>
         </Container>
     );

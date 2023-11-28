@@ -6,6 +6,8 @@ import { Container, Button } from '@mui/material';
 
 export default function Cancelar() {
     const [idCita, setIdCita] = useState('');
+    const [confirmacion, setConfirmacion] = useState('');
+    const [error, setError] = useState('');
 
 
     const handleClickCancelarCita = (e) => {
@@ -21,14 +23,18 @@ export default function Cancelar() {
             method: "DELETE"
         })
             .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`Error al cancelar cita ${idCita}`);
+                if (response.ok) {
+                    setConfirmacion('¡Cita Eliminada con éxito!');
+                    setError('');
+                } else {
+                    setConfirmacion('');
+                    setError('Hubo un problema al eliminar la cita. Inténtalo de nuevo.');
                 }
-                console.log(`Cita ${idCita} cancelada`);
-            })
-            .catch((error) => {
-                console.error("Error al cancelar cita:", error);
-            });
+            }).catch(error => {
+            console.error('Error al enviar la solicitud:', error);
+            setConfirmacion('');
+            setError('Hubo un problema al eliminar la cita. Inténtalo de nuevo.');
+        });
     };
 
 
@@ -51,6 +57,9 @@ export default function Cancelar() {
                         Cancelar Cita
                     </Button>
                 </form>
+                {/* Mensajes de confirmación y error */}
+                {confirmacion && <p style={{ color: 'green' }}>{confirmacion}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
             </Box>
         </Container>
     );

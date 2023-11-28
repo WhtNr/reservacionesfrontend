@@ -9,7 +9,9 @@ export default function Disponibilidad() {
     const [horaDeseada, setHoraDeseada] = useState('');
     const [errorFecha, setErrorFecha] = useState('');
     const [errorHora, setErrorHora] = useState('');
-
+    const [confirmacion, setConfirmacion] = useState('');
+    const [error, setError] = useState('');
+    const [franjasDisponibles, setFranjasDisponibles] = useState([]);
 
     const handleClickVerificarDisponibilidad = (e) => {
         e.preventDefault();
@@ -33,19 +35,24 @@ export default function Disponibilidad() {
         const disponibilidad = { fecha: fechaConsulta, horaDeseada };
         console.log(disponibilidad);
 
-        fetch(`http://localhost:8080/api/franja-de-trabajo/disponibilidad?fecha=${fechaConsulta}&horaDeseada=${horaDeseada}`)
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Error al verificar disponibilidad');
-                }
-                return response.json();
-            })
+        fetch('http://localhost:8080/api/franja-de-trabajo/disponibilidad?fecha=${fechaConsulta}&horaDeseada=${horaDeseada}')
+    .then((response) => {
+            if (!response.ok) {
+                throw new Error('Error al verificar disponibilidad');
+            }
+            return response.json();
+        })
             .then((data) => {
                 console.log("Disponibilidad:", data);
-                // Haz algo con los datos de disponibilidad recibidos
+                setConfirmacion('¡Disponibilidad verificada con éxito!');
+                setError('');
+                setFranjasDisponibles(data);
             })
             .catch((error) => {
                 console.error("Error al verificar disponibilidad:", error);
+                setConfirmacion('');
+                setError('Hubo un problema al verificar la disponibilidad. Inténtalo de nuevo.');
+                setFranjasDisponibles([]);
             });
     };
 
@@ -82,6 +89,21 @@ export default function Disponibilidad() {
                         Verificar Disponibilidad
                     </Button>
                 </form>
+                {/* Mensajes de confirmación, error y franjas disponibles */}
+                {confirmacion && <p style={{ color: 'green' }}>{confirmacion}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+
+                {/* Mostrar las franjas disponibles */}
+                {franjasDisponibles.length > 0 && (
+                    <div>
+                        <h3>Franjas Disponibles:</h3>
+                        <ul>
+                            {franjasDisponibles.map((franja, index) => (
+                                <li key={index}>{${franja.fecha} ${franja.horaInicio} a ${franja.horaFin}}</li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </Box>
         </Container>
     );
