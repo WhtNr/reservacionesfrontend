@@ -5,7 +5,7 @@ import Franja from './components/Franja'
 import Disponibilidad from './components/Disponibilidad'
 import Programar from './components/Programar'
 import Cancelar from './components/Cancelar'
-import Reprogramar from "./components/Reprogramar";
+import Reprogramar from './components/Reprogramar';
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Disponibilidad/>
         <Programar/>
         <Cancelar/>
-        
+        <Reprogramar/>
 
       </div>
   );

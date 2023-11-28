@@ -52,7 +52,7 @@ export default function Programar() {
             }
             console.log("Cita programada");
         }).catch((error) => {
-            console.error("Error al programar cita - Error:", error);
+            console.error("Error al programar citah:", error);
         });
     };
 
