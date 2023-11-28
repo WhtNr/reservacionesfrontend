@@ -99,7 +99,7 @@ export default function Disponibilidad() {
                         <h3>Franjas Disponibles:</h3>
                         <ul>
                             {franjasDisponibles.map((franja, index) => (
-                                <li key={index}>{${franja.fecha} ${franja.horaInicio} a ${franja.horaFin}}</li>
+                                <li key={index}>{`${franja.fecha} de ${franja.horaInicio} a ${franja.horaFin}`}</li>
                             ))}
                         </ul>
                     </div>
